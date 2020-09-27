@@ -45209,56 +45209,6 @@ exports.isPlainObject = isPlainObject;
 
 /***/ }),
 
-/***/ 1446:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const crypto = __webpack_require__(6417)
-const fs = __webpack_require__(5747)
-
-const BUFFER_SIZE = 8192
-
-function md5FileSync (path) {
-  const fd = fs.openSync(path, 'r')
-  const hash = crypto.createHash('md5')
-  const buffer = Buffer.alloc(BUFFER_SIZE)
-
-  try {
-    let bytesRead
-
-    do {
-      bytesRead = fs.readSync(fd, buffer, 0, BUFFER_SIZE)
-      hash.update(buffer.slice(0, bytesRead))
-    } while (bytesRead === BUFFER_SIZE)
-  } finally {
-    fs.closeSync(fd)
-  }
-
-  return hash.digest('hex')
-}
-
-function md5File (path) {
-  return new Promise((resolve, reject) => {
-    const output = crypto.createHash('md5')
-    const input = fs.createReadStream(path)
-
-    input.on('error', (err) => {
-      reject(err)
-    })
-
-    output.once('readable', () => {
-      resolve(output.read().toString('hex'))
-    })
-
-    input.pipe(output)
-  })
-}
-
-module.exports = md5File
-module.exports.sync = md5FileSync
-
-
-/***/ }),
-
 /***/ 7426:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -57455,27 +57405,29 @@ function wrappy (fn, cb) {
 const cache = __webpack_require__(7799);
 const core = __webpack_require__(2186);
 const github = __webpack_require__(5438);
-const md5File = __webpack_require__(1446);
 
 async function main() {
-  try {
-    const paths = ['~/.npm'];
-    const preKey = 'node-modules-';
-    const hash = md5File.sync('package-lock.json');
-    const key = preKey + hash;
-    const cacheKey = await cache.restoreCache(paths, key, [preKey]);
-    console.log({ cacheKey });
+  const paths = ['~/.npm'];
+  const preKey = 'node-modules-';
+  const key = preKey + 'hash';
+  const cacheKey = await cache.restoreCache(paths, key, [preKey]);
+  console.log({ cacheKey });
 
-    if (cacheKey !== key) {
-      const cacheId = await cache.saveCache(paths, key);
-      console.log({ cacheId });
-    }
-  } catch (error) {
-    core.setFailed(error.message)
+  if (cacheKey !== key) {
+    const cacheId = await cache.saveCache(paths, key);
+    console.log({ cacheId });
   }
+
+  console.log('cache keys', Object.keys(cache));
+  console.log('core keys', Object.keys(core));
+  console.log('github keys', Object.keys(github));
 };
 
-main();
+try {
+  main();
+} catch (error) {
+  core.setFailed(error.message);
+}
 
 
 /***/ }),
