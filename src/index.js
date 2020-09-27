@@ -8,11 +8,17 @@ const hash = core.getInput('hash');
 const key = preKey + hash;
 
 async function restore() {
-  return await cache.restoreCache(paths, key, [preKey]);
+  console.log({ paths, key, preKey });
+  const cacheKey = await cache.restoreCache(paths, key, [preKey]);
+  console.log({ cacheKey });
+  return cacheKey;
 }
 
 async function save() {
-  return await cache.saveCache(paths, key);
+  console.log({ paths, key });
+  const cacheId = await cache.saveCache(paths, key);
+  console.log({ cacheId });
+  return cacheId;
 }
 
 async function logIt() {
@@ -23,11 +29,9 @@ async function logIt() {
 
 async function main() {
   const cacheKey = await core.group('restore', restore);
-  console.log({ cacheKey });
 
   if (cacheKey !== key) {
     const cacheId = await core.group('save', save)
-    console.log({ cacheId });
   }
 
   core.group('log stuff', logIt);
