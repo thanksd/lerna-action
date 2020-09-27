@@ -1,11 +1,11 @@
 {
   "name": "@thanksd/lerna-action",
-  "version": "0.0.4",
+  "version": "0.0.3",
   "description": "GitHub action to help integrate lerna processes and reduce boilerplate",
   "main": "src/index.js",
   "scripts": {
     "build": "ncc build src/index.js",
-    "release": "npm run build && git add . && git commit -m \"$npm_package_version\" && npm version patch -y",
+    "release": "npm run build && git add . && git commit -m \"build before release\" && npm version patch -y",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
