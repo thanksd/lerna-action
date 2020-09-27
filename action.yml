@@ -1,0 +1,5 @@
+name: 'Lerna Action'
+description: 'Run lerna commands in actions without boilerplate'
+runs:
+  using: 'node12'
+  main: 'src/index.js'

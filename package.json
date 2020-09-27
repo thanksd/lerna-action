@@ -1,0 +1,24 @@
+{
+  "name": "@thanksd/lerna-action",
+  "version": "0.0.1",
+  "description": "GitHub action to help integrate lerna processes and reduce boilerplate",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thanksd/lerna-action.git"
+  },
+  "keywords": [],
+  "author": "Brian McMillen <brianmcmillen1@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thanksd/lerna-action/issues"
+  },
+  "homepage": "https://github.com/thanksd/lerna-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^4.0.0"
+  }
+}
