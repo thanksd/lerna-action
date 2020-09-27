@@ -57406,9 +57406,11 @@ const cache = __webpack_require__(7799);
 const core = __webpack_require__(2186);
 const github = __webpack_require__(5438);
 
+const hash = core.getInput('hash');
+console.log({ hash });
+
 const paths = ['~/.npm'];
 const preKey = 'node-modules-';
-const hash = core.getInput('hash');
 const key = preKey + hash;
 
 async function restore() {
@@ -57435,7 +57437,7 @@ async function main() {
   const cacheKey = await core.group('restore', restore);
 
   if (cacheKey !== key) {
-    const cacheId = await core.group('save', save)
+    await core.group('save', save)
   }
 
   core.group('log stuff', logIt);
