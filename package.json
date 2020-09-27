@@ -1,6 +1,6 @@
 {
   "name": "@thanksd/lerna-action",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "GitHub action to help integrate lerna processes and reduce boilerplate",
   "main": "src/index.js",
   "scripts": {
