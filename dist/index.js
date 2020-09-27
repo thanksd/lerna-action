@@ -57415,7 +57415,7 @@ async function main() {
       // ["${{ runner.os }}-node-modules-"]
     console.log({ cacheKey });
 
-    if (!cacheKey) {
+    if (cacheKey !== key) {
       const cacheId = await cache.saveCache(paths, key);
       console.log({ cacheId });
     }
