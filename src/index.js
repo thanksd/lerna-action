@@ -2,9 +2,11 @@ const cache = require('@actions/cache');
 const core = require('@actions/core');
 const github = require('@actions/github');
 
+const hash = core.getInput('hash');
+console.log({ hash });
+
 const paths = ['~/.npm'];
 const preKey = 'node-modules-';
-const hash = core.getInput('hash');
 const key = preKey + hash;
 
 async function restore() {
@@ -31,7 +33,7 @@ async function main() {
   const cacheKey = await core.group('restore', restore);
 
   if (cacheKey !== key) {
-    const cacheId = await core.group('save', save)
+    await core.group('save', save)
   }
 
   core.group('log stuff', logIt);
