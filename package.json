@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/thanksd/lerna-action#readme",
   "dependencies": {
+    "@actions/cache": "^1.0.2",
     "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0"
   },
