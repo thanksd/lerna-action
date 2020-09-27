@@ -1,9 +1,9 @@
 const cache = require('@actions/cache');
 const core = require('@actions/core');
 const github = require('@actions/github');
+const { exec } = require('child_process');
 
 const hash = core.getInput('hash');
-console.log({ hash });
 
 const paths = ['~/.npm'];
 const preKey = 'node-modules-';
@@ -14,6 +14,10 @@ async function restore() {
   const cacheKey = await cache.restoreCache(paths, key, [preKey]);
   console.log({ cacheKey });
   return cacheKey;
+}
+
+async function install() {
+  exec('npm i');
 }
 
 async function save() {
@@ -33,6 +37,7 @@ async function main() {
   const cacheKey = await core.group('restore', restore);
 
   if (cacheKey !== key) {
+    await core.group('install', install);
     await core.group('save', save)
   }
 

@@ -57405,9 +57405,9 @@ function wrappy (fn, cb) {
 const cache = __webpack_require__(7799);
 const core = __webpack_require__(2186);
 const github = __webpack_require__(5438);
+const { exec } = __webpack_require__(3129);
 
 const hash = core.getInput('hash');
-console.log({ hash });
 
 const paths = ['~/.npm'];
 const preKey = 'node-modules-';
@@ -57418,6 +57418,10 @@ async function restore() {
   const cacheKey = await cache.restoreCache(paths, key, [preKey]);
   console.log({ cacheKey });
   return cacheKey;
+}
+
+async function install() {
+  exec('npm i');
 }
 
 async function save() {
@@ -57437,6 +57441,7 @@ async function main() {
   const cacheKey = await core.group('restore', restore);
 
   if (cacheKey !== key) {
+    await core.group('install', install);
     await core.group('save', save)
   }
 
