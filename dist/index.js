@@ -57419,6 +57419,9 @@ async function main() {
 
     const payload = JSON.stringify(github, undefined, 2);
     console.log(`The github object: ${payload}`)
+
+    const cacheId = await cache.saveCache(['~/.npm'], 'os-node-modules-testkey');
+    console.log({ cacheId });
   } catch (error) {
     core.setFailed(error.message)
   }
