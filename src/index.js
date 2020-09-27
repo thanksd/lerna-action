@@ -6,8 +6,10 @@ async function main() {
   try {
     const cacheKey = await cache.restoreCache(
       ['~/.npm'],
-      "${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}",
-      ["${{ runner.os }}-node-modules-"]
+      'os-node-modules-testkey',
+      ['os-node-modules-']
+      // "${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}",
+      // ["${{ runner.os }}-node-modules-"]
     );
     console.log({ cacheKey });
 
