@@ -4,6 +4,7 @@
   "description": "GitHub action to help integrate lerna processes and reduce boilerplate",
   "main": "src/index.js",
   "scripts": {
+    "build": "ncc build src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,5 +21,8 @@
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.24.1"
   }
 }
