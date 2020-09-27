@@ -4,17 +4,15 @@ const github = require('@actions/github');
 
 async function main() {
   try {
-    const cacheKey = await cache.restoreCache(
-      ['~/.npm'],
-      'os-node-modules-testkey',
-      ['os-node-modules-']
-      // "${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}",
+    const paths = ['~/.npm'];
+    const preKey = 'os-node-modules-';
+    const key = preKey + '${{ hashFiles("package-lock.json") }}';
+    const cacheKey = await cache.restoreCache(paths, key, [preKey]);
       // ["${{ runner.os }}-node-modules-"]
-    );
     console.log({ cacheKey });
 
     if (!cacheKey) {
-      const cacheId = await cache.saveCache(['~/.npm'], 'os-node-modules-testkey');
+      const cacheId = await cache.saveCache(paths, key);
       console.log({ cacheId });
     }
   } catch (error) {
