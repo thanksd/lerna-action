@@ -1,5 +1,10 @@
 name: 'Lerna Action'
 description: 'Run lerna commands in actions without boilerplate'
+inputs:
+  hash:
+    description: 'hash value to use in cache key'
+    required: true
+    default: ${{ hashFiles('package.json') }}
 runs:
   using: 'node12'
   main: 'dist/index.js'
