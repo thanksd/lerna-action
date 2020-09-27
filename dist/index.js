@@ -57407,42 +57407,81 @@ const core = __webpack_require__(2186);
 const github = __webpack_require__(5438);
 const { exec } = __webpack_require__(3129);
 
-const hash = core.getInput('hash');
+const rootCache = core.getInput('root-cache');
+const packagesCache = core.getInput('packages-cache');
 
-const paths = ['~/.npm'];
-const preKey = 'node-modules-';
-const key = preKey + hash;
+const preKey = 'lerna-action-';
+const rootPaths = ['~/.npm'];
+const rootPreKey = preKey + 'root-';
+const rootKey = preKey + rootCache;
+const packagesPaths = ['node_modules', '*/*/node_modules'];
+const packagesPreKey = preKey + 'packages-';
+const packagesKey = preKey + packagesCache;
 
-async function restore() {
-  console.log({ paths, key, preKey });
-  const cacheKey = await cache.restoreCache(paths, key, [preKey]);
-  console.log({ cacheKey });
+function log(text) {
+  core.info(JSON.stringify(text, null, 2));
+}
+
+async function restoreRoot() {
+  log({ rootPaths, rootKey, rootPreKey });
+  const cacheKey = await cache.restoreCache(rootPaths, rootKey, [rootPreKey]);
+  log({ cacheKey });
   return cacheKey;
+}
+
+async function saveRoot() {
+  log({ rootPaths, rootKey });
+  const cacheId = await cache.saveCache(rootPaths, rootKey);
+  log({ cacheId });
+  return cacheId;
+}
+
+async function restorePackages() {
+  log({ packagesPaths, packagesKey, packagesPreKey });
+  const cacheKey = await cache.restoreCache(packagesPaths, packagesKey, [packagesPreKey]);
+  log({ cacheKey });
+  return cacheKey;
+}
+
+async function savePackages() {
+  log({ packagesPaths, packagesKey });
+  const cacheId = await cache.saveCache(packagesPaths, packagesKey);
+  log({ cacheId });
+  return cacheId;
 }
 
 async function install() {
   exec('npm i');
 }
 
-async function save() {
-  console.log({ paths, key });
-  const cacheId = await cache.saveCache(paths, key);
-  console.log({ cacheId });
-  return cacheId;
+async function bootstrap() {
+  exec('npx lerna bootstrap');
 }
 
 async function logIt() {
-  console.log('cache keys', Object.keys(cache));
-  console.log('core keys', Object.keys(core));
-  console.log('github keys', Object.keys(github));
+  log(Object.keys({ cache }));
+  log(Object.keys({ core }));
+  log(Object.keys({ github }));
 }
 
 async function main() {
-  const cacheKey = await core.group('restore', restore);
+  const key1 = await core.group('restore root', restoreRoot);
+  const foundRoot = key1 === rootKey;
 
-  if (cacheKey !== key) {
+  const key2 = await core.group('restore packages', restorePackages);
+  const foundPackages = key2 === packagesKey;
+
+  if (!foundRoot || !foundPackages) {
     await core.group('install', install);
-    await core.group('save', save)
+  }
+
+  if (!foundPackages) {
+    await core.group('bootstrap', bootstrap);
+    await core.group('save packages', savePackages);
+  }
+
+  if (!foundRoot) {
+    await core.group('save root', saveRoot)
   }
 
   core.group('log stuff', logIt);
