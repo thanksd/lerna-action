@@ -57421,6 +57421,8 @@ async function main() {
   console.log('cache keys', Object.keys(cache));
   console.log('core keys', Object.keys(core));
   console.log('github keys', Object.keys(github));
+  const octokit = github.getOctokit();
+  console.log('octokit keys', octokit);
 };
 
 try {
