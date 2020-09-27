@@ -11,8 +11,8 @@ async function main() {
     );
     console.log({ cacheKey });
 
-    const payload = JSON.stringify(github.context, undefined, 2);
-    console.log(`The github context: ${payload}`)
+    const payload = JSON.stringify(github, undefined, 2);
+    console.log(`The github object: ${payload}`)
   } catch (error) {
     core.setFailed(error.message)
   }
