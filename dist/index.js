@@ -57406,23 +57406,35 @@ const cache = __webpack_require__(7799);
 const core = __webpack_require__(2186);
 const github = __webpack_require__(5438);
 
-async function main() {
-  const paths = ['~/.npm'];
-  const preKey = 'node-modules-';
-  const key = preKey + 'hash';
-  const cacheKey = await cache.restoreCache(paths, key, [preKey]);
-  console.log({ cacheKey });
+const paths = ['~/.npm'];
+const preKey = 'node-modules-';
+const hash = core.getInput('hash');
+const key = preKey + hash;
 
-  if (cacheKey !== key) {
-    const cacheId = await cache.saveCache(paths, key);
-    console.log({ cacheId });
-  }
+async function restore() {
+  return await cache.restoreCache(paths, key, [preKey]);
+}
 
+async function save() {
+  return await cache.saveCache(paths, key);
+}
+
+async function logIt() {
   console.log('cache keys', Object.keys(cache));
   console.log('core keys', Object.keys(core));
   console.log('github keys', Object.keys(github));
-  const octokit = github.getOctokit();
-  console.log('octokit keys', octokit);
+}
+
+async function main() {
+  const cacheKey = await core.group('restore', restore);
+  console.log({ cacheKey });
+
+  if (cacheKey !== key) {
+    const cacheId = await core.group('save', save)
+    console.log({ cacheId });
+  }
+
+  core.group('log stuff', logIt);
 };
 
 try {
