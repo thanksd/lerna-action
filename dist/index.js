@@ -57459,6 +57459,8 @@ async function bootstrap() {
 }
 
 async function logIt() {
+  exec('ls node_modules');
+  exec('ls node_modules/.bin');
   log({ cache: Object.keys(cache) });
   log({ core: Object.keys(core) });
   log({ github: Object.keys(github) });
