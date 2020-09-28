@@ -57413,10 +57413,10 @@ const packagesCache = core.getInput('packages-cache');
 const preKey = 'lerna-action-';
 const rootPaths = ['~/.npm'];
 const rootPreKey = preKey + 'root-';
-const rootKey = preKey + rootCache;
+const rootKey = rootPreKey + rootCache;
 const packagesPaths = ['node_modules', '*/*/node_modules'];
 const packagesPreKey = preKey + 'packages-';
-const packagesKey = preKey + packagesCache;
+const packagesKey = packagesPreKey + packagesCache;
 
 function log(text) {
   core.info(JSON.stringify(text, null, 2));
