@@ -8,7 +8,7 @@ inputs:
   packages-cache:
     description: 'hash value to use for lerna packages cache'
     required: true
-    default: ${{ hashFiles('**/pacakge-lock.json')}}
+    default: ${{ hashFiles('**/package-lock.json')}}
 runs:
   using: 'node12'
   main: 'dist/index.js'

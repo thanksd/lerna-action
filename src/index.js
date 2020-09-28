@@ -55,9 +55,9 @@ async function bootstrap() {
 }
 
 async function logIt() {
-  log(Object.keys({ cache }));
-  log(Object.keys({ core }));
-  log(Object.keys({ github }));
+  log({ cache: Object.keys(cache) });
+  log({ core: Object.keys(core) });
+  log({ github: Object.keys(github) });
 }
 
 async function main() {
