@@ -57405,7 +57405,8 @@ function wrappy (fn, cb) {
 const cache = __webpack_require__(7799);
 const core = __webpack_require__(2186);
 const github = __webpack_require__(5438);
-const { exec } = __webpack_require__(3129);
+const util = __webpack_require__(1669);
+const exec = util.promisify(__webpack_require__(3129).exec);
 
 const rootCache = core.getInput('root-cache');
 const packagesCache = core.getInput('packages-cache');
@@ -57459,8 +57460,10 @@ async function bootstrap() {
 }
 
 async function logIt() {
-  exec('ls node_modules');
-  exec('ls node_modules/.bin');
+  const { stdout: outA } = await exec('ls node_modules');
+  const { stdout: outB } = await exec('ls node_modules/.bin');
+  log(outA);
+  log(outB);
   log({ cache: Object.keys(cache) });
   log({ core: Object.keys(core) });
   log({ github: Object.keys(github) });
