@@ -22,41 +22,29 @@ function log(text) {
 async function restoreRoot() {
   log({ rootPaths, rootKey, rootPreKey });
   const cacheKey = await cache.restoreCache(rootPaths, rootKey, [rootPreKey]);
-  if (cacheKey) {
-    core.saveState('ROOT_CACHE_KEY', cacheKey);
-  }
   log({ cacheKey });
   return cacheKey;
 }
 
 async function saveRoot() {
   log({ rootPaths, rootKey });
-  const cacheKey = core.getState('ROOT_CACHE_KEY');
-  if (cacheKey) {
-    const cacheId = await cache.saveCache(rootPaths, rootKey);
-    log({ cacheId });
-    return cacheId;
-  }
+  const cacheId = await cache.saveCache(rootPaths, rootKey);
+  log({ cacheId });
+  return cacheId;
 }
 
 async function restorePackages() {
   log({ packagesPaths, packagesKey, packagesPreKey });
   const cacheKey = await cache.restoreCache(packagesPaths, packagesKey, [packagesPreKey]);
-  if (cacheKey) {
-    core.saveState('PACKAGES_CACHE_KEY', cacheKey);
-  }
   log({ cacheKey });
   return cacheKey;
 }
 
 async function savePackages() {
   log({ packagesPaths, packagesKey });
-  const cacheKey = core.getState('PACKAGES_CACHE_KEY');
-  if (cacheKey) {
-    const cacheId = await cache.saveCache(packagesPaths, packagesKey);
-    log({ cacheId });
-    return cacheId;
-  }
+  const cacheId = await cache.saveCache(packagesPaths, packagesKey);
+  log({ cacheId });
+  return cacheId;
 }
 
 async function install() {
@@ -82,6 +70,7 @@ async function logIt() {
 async function main() {
   const foundRoot = await core.group('restore root', restoreRoot);
   const foundPackages = await core.group('restore packages', restorePackages);
+  log({ foundRoot, foundPackages });
 
   if (!foundRoot || !foundPackages) {
     await core.group('install', install);
