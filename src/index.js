@@ -70,7 +70,6 @@ async function logIt() {
 async function main() {
   const foundRoot = await core.group('restore root', restoreRoot);
   const foundPackages = await core.group('restore packages', restorePackages);
-  log({ foundRoot, foundPackages });
 
   if (!foundRoot || !foundPackages) {
     await core.group('install', install);
