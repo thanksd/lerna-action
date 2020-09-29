@@ -80,11 +80,8 @@ async function logIt() {
 }
 
 async function main() {
-  const key1 = await core.group('restore root', restoreRoot);
-  const foundRoot = key1 === rootKey;
-
-  const key2 = await core.group('restore packages', restorePackages);
-  const foundPackages = key2 === packagesKey;
+  const foundRoot = await core.group('restore root', restoreRoot);
+  const foundPackages = await core.group('restore packages', restorePackages);
 
   if (!foundRoot || !foundPackages) {
     await core.group('install', install);
