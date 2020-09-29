@@ -60,11 +60,13 @@ async function savePackages() {
 }
 
 async function install() {
-  exec('npm i');
+  const { stdout } = await exec('npm i');
+  log(stdout);
 }
 
 async function bootstrap() {
-  exec('npx lerna bootstrap');
+  const { stdout } = await exec('npx lerna bootstrap');
+  log(stdout);
 }
 
 async function logIt() {
