@@ -58,10 +58,8 @@ async function bootstrap() {
 }
 
 async function logIt() {
-  const { stdout: outA } = await exec('ls node_modules');
-  const { stdout: outB } = await exec('ls node_modules/.bin');
-  log(outA);
-  log(outB);
+  const { stdout } = await exec('ls node_modules/.bin');
+  log(stdout);
   log({ cache: Object.keys(cache) });
   log({ core: Object.keys(core) });
   log({ github: Object.keys(github) });
