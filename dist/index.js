@@ -57425,7 +57425,7 @@ function log(text) {
 
 async function restoreRoot() {
   log({ rootPaths, rootKey, rootPreKey });
-  const cacheKey = await cache.restoreCache(rootPaths, rootKey, [rootPreKey]);
+  const cacheKey = await cache.restoreCache(rootPaths, rootKey, []);
   log({ cacheKey });
   return cacheKey;
 }
@@ -57439,7 +57439,7 @@ async function saveRoot() {
 
 async function restorePackages() {
   log({ packagesPaths, packagesKey, packagesPreKey });
-  const cacheKey = await cache.restoreCache(packagesPaths, packagesKey, [packagesPreKey]);
+  const cacheKey = await cache.restoreCache(packagesPaths, packagesKey, []);
   log({ cacheKey });
   return cacheKey;
 }
