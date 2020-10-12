@@ -85,6 +85,8 @@ async function npmConfig() {
     const registry = parts[parts.length - 1]; // remove https or http if it exists
     await exec(`echo "registry=https://${registry}" >> .npmrc`);
     await exec(`echo "//${registry}/:_authToken=$NPM_TOKEN" >> .npmrc`);
+    const { stdout } = await exec(`cat .npmrc`);
+    log(stdout);
   }
 }
 
