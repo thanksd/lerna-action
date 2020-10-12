@@ -9,6 +9,7 @@ const packagesCache = core.getInput('packages-cache');
 const thenPublish = core.getInput('then-publish');
 const gitEmail = core.getInput('git-email');
 const gitName = core.getInput('git-name');
+const npmRegistry = core.getInput('npm-registry');
 
 const preKey = 'lerna-action-';
 const rootPaths = ['~/.npm'];
