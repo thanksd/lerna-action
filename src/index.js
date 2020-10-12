@@ -6,6 +6,7 @@ const exec = util.promisify(require('child_process').exec);
 
 const rootCache = core.getInput('root-cache');
 const packagesCache = core.getInput('packages-cache');
+const thenPublish = core.getInput('thenPublish');
 
 const preKey = 'lerna-action-';
 const rootPaths = ['~/.npm'];
@@ -65,6 +66,17 @@ async function logIt() {
   log({ github: Object.keys(github) });
 }
 
+async function publish() {
+  const { stdout } = await exec(`
+    git config --global user.email "brianmcmillen@gmail.com"
+    git config --global user.name "GitHub Action"
+    touch .npmrc
+    echo "registry=https://npm.pkg.github.com/thanksd" > .npmrc
+    echo "//npm.pkg.github.com/:_authToken=$NPM_TOKEN" >> .npmrc
+  `);
+  log(stdout);
+}
+
 async function main() {
   const foundRoot = await core.group('restore root', restoreRoot);
   const foundPackages = await core.group('restore packages', restorePackages);
@@ -79,7 +91,11 @@ async function main() {
   }
 
   if (!foundRoot) {
-    await core.group('save root', saveRoot)
+    await core.group('save root', saveRoot);
+  }
+
+  if (thenPublish === 'Y') {
+    await core.group('publish', publish);
   }
 
   core.group('log stuff', logIt);
