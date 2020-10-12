@@ -100,6 +100,21 @@ async function npmConfig() {
 async function publish() {
   await gitConfig();
   await npmConfig();
+  const { context: { event_name: name, event, ref } } = github;
+  const merged = event.pull_request.merged === 'true';
+  const pushOrMerge = (name === 'push' || merged);
+
+  let version;
+  if (name === 'pull_request') {
+    version = 'prerelease';
+  } else if (ref === 'refs/heads/develop' && pushOrMerge) {
+    version = 'patch';
+  } else if (ref === 'refs/heads/master' && pushOrMerge) {
+    version = 'minor';
+  }
+  if (version) {
+    await exec(`npx lerna version ${version} -y && npx lerna publish from-git -y`);
+  }
 }
 
 async function main() {
