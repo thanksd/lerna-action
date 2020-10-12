@@ -83,9 +83,8 @@ async function npmConfig() {
     const regex = /^https?:\/\//;
     const parts = npmRegistry.split(regex);
     const registry = parts[parts.length - 1]; // remove https or http if it exists
-    const base = registry.split('/')[0]; // get the base url to use for auth
     await exec(`echo "registry=https://${registry}" >> .npmrc`);
-    await exec(`echo "//${base}/:_authToken=$NPM_TOKEN" >> .npmrc`);
+    await exec(`echo "//${registry}/:_authToken=$NPM_TOKEN" >> .npmrc`);
   }
 }
 

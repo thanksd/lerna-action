@@ -21,6 +21,9 @@ inputs:
     description: 'User name to use for git commits'
     required: true
     default: 'GitHub Action'
+  npm-registry:
+    description: 'registry to use for npm packages'
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'
