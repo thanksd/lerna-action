@@ -57480,6 +57480,11 @@ async function gitConfig() {
   if (gitName) {
     await exec(`git config --global user.name "${gitName}"`);
   }
+
+  await exec(`
+    git fetch origin \${{ github.head_ref }} --depth=1
+    git checkout \${{ github.head_ref }} --
+  `);
 }
 
 async function npmConfig() {
@@ -57488,8 +57493,9 @@ async function npmConfig() {
     const regex = /^https?:\/\//;
     const parts = npmRegistry.split(regex);
     const registry = parts[parts.length - 1]; // remove https or http if it exists
+    const base = registry.split('/')[0]; // get the base url to use for auth
     await exec(`echo "registry=https://${registry}" >> .npmrc`);
-    await exec(`echo "//${registry}/:_authToken=$NPM_TOKEN" >> .npmrc`);
+    await exec(`echo "//${base}/:_authToken=$NPM_TOKEN" >> .npmrc`);
     const { stdout } = await exec(`cat .npmrc`);
     log(stdout);
   }
