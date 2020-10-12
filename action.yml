@@ -9,10 +9,18 @@ inputs:
     description: 'hash value to use for lerna packages cache'
     required: true
     default: ${{ hashFiles('*/*/package-lock.json') }}
-  thenPublish:
+  then-publish:
     description: '(Y/N) whether to publish packages after the action completes'
     required: false
     default: 'N'
+  git-email:
+    description: 'Email address to use for git commits'
+    required: true
+    default: 'github@example.com'
+  git-name:
+    description: 'User name to use for git commits'
+    required: true
+    default: 'GitHub Action'
 runs:
   using: 'node12'
   main: 'dist/index.js'

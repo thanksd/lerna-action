@@ -6,7 +6,9 @@ const exec = util.promisify(require('child_process').exec);
 
 const rootCache = core.getInput('root-cache');
 const packagesCache = core.getInput('packages-cache');
-const thenPublish = core.getInput('thenPublish');
+const thenPublish = core.getInput('then-publish');
+const gitEmail = core.getInput('git-email');
+const gitName = core.getInput('git-name');
 
 const preKey = 'lerna-action-';
 const rootPaths = ['~/.npm'];
@@ -66,15 +68,30 @@ async function logIt() {
   log({ github: Object.keys(github) });
 }
 
+async function gitConfig() {
+  if (gitEmail) {
+    await exec(`git config --global user.email "${gitEmail}"`);
+  }
+  if (gitName) {
+    await exec(`git config --global user.name "${gitName}"`);
+  }
+}
+
+async function npmConfig() {
+  await exec('touch .npmrc');
+  if (npmRegistry) {
+    const regex = /^https?:\/\//;
+    const parts = npmRegistry.split(regex);
+    const registry = parts[parts.length - 1]; // remove https or http if it exists
+    const base = registry.split('/')[0]; // get the base url to use for auth
+    await exec(`echo "registry=https://${registry}" >> .npmrc`);
+    await exec(`echo "//${base}/:_authToken=$NPM_TOKEN" >> .npmrc`);
+  }
+}
+
 async function publish() {
-  const { stdout } = await exec(`
-    git config --global user.email "brianmcmillen@gmail.com"
-    git config --global user.name "GitHub Action"
-    touch .npmrc
-    echo "registry=https://npm.pkg.github.com/thanksd" > .npmrc
-    echo "//npm.pkg.github.com/:_authToken=$NPM_TOKEN" >> .npmrc
-  `);
-  log(stdout);
+  await gitConfig();
+  await npmConfig();
 }
 
 async function main() {
