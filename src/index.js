@@ -100,8 +100,8 @@ async function npmConfig() {
 async function publish() {
   await gitConfig();
   await npmConfig();
-  const { context: { event_name: name, event, ref } } = github;
-  const merged = event.pull_request.merged === 'true';
+  const { event_name: name, event, ref } = github?.context;
+  const merged = event?.pull_request?.merged === 'true';
   const pushOrMerge = (name === 'push' || merged);
 
   let version;
@@ -135,7 +135,11 @@ async function main() {
   }
 
   if (thenPublish === 'Y') {
-    await core.group('publish', publish);
+    try {
+      await core.group('publish', publish);
+    } catch (e) {
+      log(e);
+    }
   }
 
   core.group('log stuff', logIt);
