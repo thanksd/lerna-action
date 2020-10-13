@@ -57480,9 +57480,9 @@ async function gitConfig(head) {
   if (gitName) {
     await exec(`git config --global user.name "${gitName}"`);
   }
-  if (head) {
-    await exec(`git fetch origin ${head} --depth=1 && git checkout ${head} --`);
-  }
+
+  const ref = head || '';
+  await exec(`git fetch origin ${ref} --depth=1 && git checkout ${ref} --`);
 }
 
 async function npmConfig() {
