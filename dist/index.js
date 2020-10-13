@@ -57494,9 +57494,9 @@ async function npmConfig() {
     const base = registry.split('/')[0]; // get the base url to use for auth
     await exec(`echo "registry=https://${registry}" >> .npmrc`);
     await exec(`echo "//${base}/:_authToken=$NPM_TOKEN" >> .npmrc`);
-    const { stdout } = await exec(`cat .npmrc`);
-    log(stdout);
   }
+  const { stdout } = await exec(`cat .npmrc`);
+  log(stdout);
 }
 
 async function publish() {
