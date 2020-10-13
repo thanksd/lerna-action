@@ -57483,7 +57483,7 @@ async function gitConfig(head) {
 
   await exec(`
     git fetch origin ${head} --depth=1
-    git checkout ${headß} --
+    git checkout ${head} --
   `);
 }
 
