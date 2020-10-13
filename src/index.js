@@ -102,6 +102,8 @@ async function publish() {
   const merged = e && e.pull_request && e.pull_request.merged === 'true';
   const pushOrMerge = (name === 'push' || merged);
 
+  log({ name, merged, ref, head, pushOrMerge });
+
   let version;
   if (name === 'pull_request') {
     version = 'prerelease';
@@ -110,6 +112,8 @@ async function publish() {
   } else if (ref === 'refs/heads/master' && pushOrMerge) {
     version = 'minor';
   }
+
+  log({ version });
   if (version) {
     await exec(`npx lerna version ${version} -y && npx lerna publish from-git -y`);
   }
