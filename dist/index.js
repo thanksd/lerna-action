@@ -57504,8 +57504,8 @@ async function npmConfig() {
 async function publish() {
   await gitConfig();
   await npmConfig();
-  const { event_name: name, event, ref } = github?.context;
-  const merged = event?.pull_request?.merged === 'true';
+  const { event_name: name, event: e, ref } = github.context || {};
+  const merged = e && e.pull_request && e.pull_request.merged === 'true';
   const pushOrMerge = (name === 'push' || merged);
 
   let version;
