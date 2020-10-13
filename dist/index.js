@@ -57500,8 +57500,8 @@ async function npmConfig() {
 }
 
 async function publish() {
-  const { event_name: name, event: e, ref, head_ref: head } = github.context || {};
-  await gitConfig(head);
+  const { eventName: name, payload: e, ref, head } = github.context.github || {};
+  await gitConfig(head.ref);
   await npmConfig();
   const merged = e && e.pull_request && e.pull_request.merged === 'true';
   const pushOrMerge = (name === 'push' || merged);
