@@ -57470,7 +57470,7 @@ async function logIt() {
   log(stdout);
   log({ cache: Object.keys(cache) });
   log({ core: Object.keys(core) });
-  log({ github: Object.keys(github) });
+  log({ github: github.context });
 }
 
 async function gitConfig(head) {
@@ -57480,11 +57480,9 @@ async function gitConfig(head) {
   if (gitName) {
     await exec(`git config --global user.name "${gitName}"`);
   }
-
-  await exec(`
-    git fetch origin ${head} --depth=1
-    git checkout ${head} --
-  `);
+  if (head) {
+    await exec(`git fetch origin ${head} --depth=1 && git checkout ${head} --`);
+  }
 }
 
 async function npmConfig() {
