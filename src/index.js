@@ -96,7 +96,8 @@ async function npmConfig() {
 }
 
 async function publish() {
-  const { eventName: name, payload: e, ref, head } = github.context || {};
+  const { eventName: name, payload: e, ref } = github.context || {};
+  const head = e && e.pull_request && e.pull_request.head || {};
   log({ name, payload: e, ref, head });
 
   await gitConfig(head.ref);
