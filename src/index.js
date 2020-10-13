@@ -69,7 +69,7 @@ async function logIt() {
   log({ github: Object.keys(github) });
 }
 
-async function gitConfig() {
+async function gitConfig(head) {
   if (gitEmail) {
     await exec(`git config --global user.email "${gitEmail}"`);
   }
@@ -78,8 +78,8 @@ async function gitConfig() {
   }
 
   await exec(`
-    git fetch origin \${{ github.head_ref }} --depth=1
-    git checkout \${{ github.head_ref }} --
+    git fetch origin ${head} --depth=1
+    git checkout ${headß} --
   `);
 }
 
@@ -98,9 +98,9 @@ async function npmConfig() {
 }
 
 async function publish() {
-  await gitConfig();
+  const { event_name: name, event: e, ref, head_ref: head } = github.context || {};
+  await gitConfig(head);
   await npmConfig();
-  const { event_name: name, event: e, ref } = github.context || {};
   const merged = e && e.pull_request && e.pull_request.merged === 'true';
   const pushOrMerge = (name === 'push' || merged);
 
