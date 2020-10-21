@@ -111,7 +111,7 @@ async function publish() {
     version = 'prerelease';
     const { stdout: lernaVersion } = await exec(`cat lerna.json | jq -r '.version' | cut -d "-" -f 1`);
     const { stdout: hash } = await exec(`git rev-parse --short HEAD`);
-    version = `${lernaVersion}-${hash}`;
+    version = `${lernaVersion}-${hash}`.replace(/[\n\r]+/g, '');
   } else if (ref === 'refs/heads/develop' && pushOrMerge) {
     version = 'patch';
   } else if (ref === 'refs/heads/master' && pushOrMerge) {
