@@ -57526,7 +57526,7 @@ async function publish() {
   if (version) {
     const options = name === 'pull_request' ? '--no-push' : '';
     await exec(`npx lerna version ${version} ${options} -y`);
-    await exec(`npx lerna publish from-git --ignore-scripts -y`);
+    await exec(`npx lerna publish from-package --ignore-scripts -y`);
   }
 }
 
