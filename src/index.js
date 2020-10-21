@@ -109,18 +109,19 @@ async function publish() {
   let version;
   if (name === 'pull_request') {
     version = 'prerelease';
-    await exec(`lerna_version=$(cat lerna.json | jq -r '.version' | cut -d "-" -f 1)`);
-    await exec(`git_hash=$(git rev-parse --short HEAD)`);
-    await exec(`npx lerna version "$lerna_version-$git_hash" --no-push -y`);
+    const { stdout: lernaVersion } = await exec(`cat lerna.json | jq -r '.version' | cut -d "-" -f 1`);
+    const { stdout: hash } = await exec(`git rev-parse --short HEAD`);
+    version = `${lernaVersion}-${hash}`;
   } else if (ref === 'refs/heads/develop' && pushOrMerge) {
     version = 'patch';
-    await exec(`npx lerna version patch -y`);
   } else if (ref === 'refs/heads/master' && pushOrMerge) {
     version = 'minor';
-    await exec(`npx lerna version minor -y`);
   }
+  log({ version });
 
   if (version) {
+    const options = name === 'pull_request' ? '--no-push' : '';
+    await exec(`npx lerna version ${version} ${options} -y`);
     await exec(`npx lerna publish from-git --ignore-scripts -y`);
   }
 }
